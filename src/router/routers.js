@@ -47,14 +47,70 @@ export const constantRouterMap = [
   {
     path: '/user',
     component: Layout,
-    hidden: true,
+    hidden: false,
     redirect: 'noredirect',
     children: [
       {
         path: 'center',
         component: (resolve) => require(['@/views/system/user/center'], resolve),
         name: '个人中心',
-        meta: { title: '个人中心' }
+        meta: { title: '个人中心', icon: 'java' }
+      }
+    ]
+  },
+  {
+    path: '/config',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/config'], resolve),
+        name: '条件配置',
+        meta: { title: '条件配置', icon: 'edit' }
+      }
+    ]
+  },
+  {
+    path: '/config/dept',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/config/dept'], resolve),
+        name: '部门配置',
+        meta: { title: '部门配置', icon: 'edit' }
+      }
+    ]
+  },
+  {
+    path: '/config/people',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/config/people'], resolve),
+        name: '人员配置',
+        meta: { title: '人员配置', icon: 'edit' }
+      }
+    ]
+  },
+  {
+    path: '/submit',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/submit'], resolve),
+        name: '请假申请',
+        meta: { title: '请假申请', icon: 'tab' }
       }
     ]
   }
