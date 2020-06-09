@@ -113,6 +113,20 @@ export const constantRouterMap = [
         meta: { title: '请假申请', icon: 'tab' }
       }
     ]
+  },
+  {
+    path: '/mydict',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/mydict'], resolve),
+        name: '我的字典',
+        meta: { title: '我的字典', icon: 'tab' }
+      }
+    ]
   }
 ]
 

@@ -89,6 +89,7 @@
           />
         </template>
       </el-table-column>
+      <el-table-column label="在位率" prop="preRate" />
       <el-table-column prop="createTime" label="创建日期">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
