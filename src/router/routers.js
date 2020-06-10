@@ -115,6 +115,20 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/holiday',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/holiday'], resolve),
+        name: '请假记录',
+        meta: { title: '请假记录', icon: 'tab' }
+      }
+    ]
+  },
+  {
     path: '/mydict',
     component: Layout,
     hidden: false,
