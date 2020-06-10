@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # ELADMIN-WEB
 
 ELADMIN 前端源码
