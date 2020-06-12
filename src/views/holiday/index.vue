@@ -8,6 +8,8 @@
         <el-input v-model="query.userName" clearable placeholder="用户名" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <label class="el-form-item-label">部门名称</label>
         <el-input v-model="query.deptName" clearable placeholder="部门名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <label class="el-form-item-label">手机号</label>
+        <el-input v-model="query.phone" clearable placeholder="手机号" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <rrOperation :crud="crud" />
       </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
@@ -18,16 +20,29 @@
           <el-form-item label="用户名" prop="userName">
             <el-input v-model="form.userName" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="部门名称">
+          <el-form-item label="部门名称" prop="deptName">
             <el-input v-model="form.deptName" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="请假开始时间">
-            <el-date-picker v-model="form.startDate" type="datetime" style="width: 370px;" />
+          <el-form-item label="开始时间" prop="startDate">
+            <el-date-picker v-model="form.startDate" type="date" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="请假结束时间">
-            <el-date-picker v-model="form.endDate" type="datetime" style="width: 370px;" />
+          <el-form-item label="结束时间" prop="endDate">
+            <el-date-picker v-model="form.endDate" type="date" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="总共请假天数">
+          <el-form-item label="请假时间：" prop="rangeDate">
+            <el-date-picker
+              v-model="form.rangeDate"
+              type="daterange"
+              format="yyyy-MM-dd"
+              value-format="yyyy-MM-dd"
+              :style="{width: '100%'}"
+              start-placeholder="开始日期"
+              end-placeholder="结束日期"
+              range-separator="至"
+              clearable
+            />
+          </el-form-item>
+          <el-form-item label="天数">
             <el-input v-model="form.count" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="假期状态">
@@ -40,6 +55,9 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item label="手机号" prop="phone">
+            <el-input v-model="form.phone" style="width: 370px;" />
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -51,22 +69,24 @@
         <el-table-column type="selection" width="55" />
         <el-table-column prop="userName" label="用户名" />
         <el-table-column prop="deptName" label="部门名称" />
-        <el-table-column prop="startDate" label="请假开始时间">
+        <el-table-column prop="rangeDate" label="请假时间" />
+        <el-table-column prop="startDate" label="开始时间">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.startDate) }}</span>
+            <span>{{ parseTime(scope.row.startDate,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="endDate" label="请假结束时间">
+        <el-table-column prop="endDate" label="结束时间">
           <template slot-scope="scope">
-            <span>{{ parseTime(scope.row.endDate) }}</span>
+            <span>{{ parseTime(scope.row.endDate,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="count" label="总共请假天数" />
+        <el-table-column prop="count" label="天数" />
         <el-table-column prop="status" label="假期状态">
           <template slot-scope="scope">
             {{ dict.label.holiday_status[scope.row.status] }}
           </template>
         </el-table-column>
+        <el-table-column prop="phone" label="手机号" />
         <el-table-column v-permission="['admin','holidayRecord:edit','holidayRecord:del']" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
@@ -90,7 +110,7 @@ import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
 
-const defaultForm = { id: null, userName: null, deptName: null, startDate: null, endDate: null, count: null, createTime: null, updateTime: null, status: null }
+const defaultForm = { id: null, userName: null, deptName: null, startDate: null, endDate: null, count: null, createTime: null, updateTime: null, status: null, phone: null }
 export default {
   name: 'HolidayRecord',
   components: { pagination, crudOperation, rrOperation, udOperation },
@@ -109,11 +129,30 @@ export default {
       rules: {
         userName: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }
-        ]
+        ],
+        deptName: [
+          { required: true, message: '部门名称不能为空', trigger: 'blur' }
+        ],
+        startDate: [
+          { required: true, message: '开始时间不能为空', trigger: 'blur' }
+        ],
+        endDate: [
+          { required: true, message: '结束时间不能为空', trigger: 'blur' }
+        ],
+        phone: [
+          { required: true, message: '手机号不能为空', trigger: 'blur' }
+        ],
+        rangeDate: [{
+          required: false,
+          type: 'array',
+          message: '请至少选择一个时间',
+          trigger: 'change'
+        }]
       },
       queryTypeOptions: [
         { key: 'userName', display_name: '用户名' },
-        { key: 'deptName', display_name: '部门名称' }
+        { key: 'deptName', display_name: '部门名称' },
+        { key: 'phone', display_name: '手机号' }
       ]
     }
   },
