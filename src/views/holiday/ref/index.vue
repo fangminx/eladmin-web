@@ -9,7 +9,7 @@
         <label class="el-form-item-label">用户名</label>
         <el-input v-model="query.userName" clearable placeholder="用户名" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <label class="el-form-item-label">休息日</label>
-        <el-input v-model="query.refHolidayDate" clearable placeholder="休息日" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-date-picker v-model="query.refHolidayDate" type="date" value-format="yyyy-MM-dd" clearable placeholder="休息日" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <label class="el-form-item-label">手机号</label>
         <el-input v-model="query.userPhone" clearable placeholder="手机号" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <rrOperation :crud="crud" />
