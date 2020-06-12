@@ -47,6 +47,15 @@
         <el-form-item label="状态" prop="enabled">
           <el-radio v-for="item in dict.dept_status" :key="item.id" v-model="form.enabled" :label="item.value">{{ item.label }}</el-radio>
         </el-form-item>
+        <el-form-item label="部门在位率" prop="preRate">
+          <el-input-number
+            v-model.number="form.preRate"
+            :min="0"
+            :max="1"
+            controls-position="right"
+            style="width: 370px;"
+          />
+        </el-form-item>
         <el-form-item v-if="form.isTop === '0'" style="margin-bottom: 0;" label="上级部门" prop="pid">
           <treeselect
             v-model="form.pid"

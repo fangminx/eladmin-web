@@ -129,6 +129,34 @@ export const constantRouterMap = [
     ]
   },
   {
+    path: '/ref',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/holiday/ref'], resolve),
+        name: '参考假日',
+        meta: { title: '参考假日', icon: 'tab' }
+      }
+    ]
+  },
+  {
+    path: '/real',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/holiday/real'], resolve),
+        name: '实时假日',
+        meta: { title: '实时假日', icon: 'tab' }
+      }
+    ]
+  },
+  {
     path: '/mydict',
     component: Layout,
     hidden: false,
