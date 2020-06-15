@@ -23,12 +23,12 @@
           <el-form-item label="部门名称" prop="deptName">
             <el-input v-model="form.deptName" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="开始时间" prop="startDate">
+          <!-- <el-form-item label="开始时间" prop="startDate">
             <el-date-picker v-model="form.startDate" type="date" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="结束时间" prop="endDate">
             <el-date-picker v-model="form.endDate" type="date" style="width: 370px;" />
-          </el-form-item>
+          </el-form-item> -->
           <el-form-item label="请假时间：" prop="rangeDate">
             <el-date-picker
               v-model="form.rangeDate"
@@ -69,7 +69,7 @@
         <el-table-column type="selection" width="55" />
         <el-table-column prop="userName" label="用户名" />
         <el-table-column prop="deptName" label="部门名称" />
-        <el-table-column prop="rangeDate" label="请假时间" />
+        <!-- <el-table-column prop="rangeDate" label="请假时间" /> -->
         <el-table-column prop="startDate" label="开始时间">
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.startDate,'{y}-{m}-{d}') }}</span>
@@ -133,17 +133,17 @@ export default {
         deptName: [
           { required: true, message: '部门名称不能为空', trigger: 'blur' }
         ],
-        startDate: [
-          { required: true, message: '开始时间不能为空', trigger: 'blur' }
-        ],
-        endDate: [
-          { required: true, message: '结束时间不能为空', trigger: 'blur' }
-        ],
+        // startDate: [
+        //   { required: true, message: '开始时间不能为空', trigger: 'blur' }
+        // ],
+        // endDate: [
+        //   { required: true, message: '结束时间不能为空', trigger: 'blur' }
+        // ],
         phone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' }
         ],
         rangeDate: [{
-          required: false,
+          required: true,
           type: 'array',
           message: '请至少选择一个时间',
           trigger: 'change'
@@ -160,6 +160,17 @@ export default {
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {
       return true
+    },
+    // // 编辑前做的操作
+    // [CRUD.HOOK.afterToEdit](crud, form) {
+    //   form.rangeDate = [form.startDate, form.endDate]
+    // }
+    // 打开编辑弹窗前做的操作
+    [CRUD.HOOK.beforeToEdit](crud, form) {
+      var array = []
+      array.push(this.parseTime(form.startDate, '{y}-{m}-{d}'))
+      array.push(this.parseTime(form.endDate, '{y}-{m}-{d}'))
+      this.form.rangeDate = array
     }
   }
 }
