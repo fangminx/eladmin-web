@@ -82,9 +82,9 @@ export default {
   data() {
     return {
       permission: {
-        add: ['admin', 'holidayReference:add'],
-        edit: ['admin', 'holidayReference:edit'],
-        del: ['admin', 'holidayReference:del']
+        // add: ['admin', 'holidayReference:add'],
+        // edit: ['admin', 'holidayReference:edit'],
+        // del: ['admin', 'holidayReference:del']
       },
       rules: {
         deptName: [
