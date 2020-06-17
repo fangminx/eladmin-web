@@ -57,7 +57,7 @@ export default {
               duration: 0,
               onClick: () => {
                 that.$router.push({
-                  path: '/alarmManage/monitAlarmInfo'
+                  path: '/holiday/ref/index'
                 })
               }
             })

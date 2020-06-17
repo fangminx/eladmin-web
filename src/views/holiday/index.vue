@@ -18,10 +18,13 @@
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
           <el-form-item label="用户名" prop="userName">
-            <el-input v-model="form.userName" style="width: 370px;" />
+            <el-input v-model="form.userName" :disabled="true" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="部门名称" prop="deptName">
-            <el-input v-model="form.deptName" style="width: 370px;" />
+            <el-input v-model="form.deptName" :disabled="true" style="width: 370px;" />
+          </el-form-item>
+          <el-form-item label="手机号" prop="phone">
+            <el-input v-model="form.phone" :disabled="true" style="width: 370px;" />
           </el-form-item>
           <!-- <el-form-item label="开始时间" prop="startDate">
             <el-date-picker v-model="form.startDate" type="date" style="width: 370px;" />
@@ -29,7 +32,7 @@
           <el-form-item label="结束时间" prop="endDate">
             <el-date-picker v-model="form.endDate" type="date" style="width: 370px;" />
           </el-form-item> -->
-          <el-form-item label="请假时间：" prop="rangeDate">
+          <el-form-item label="请假时间" prop="rangeDate">
             <el-date-picker
               v-model="form.rangeDate"
               type="daterange"
@@ -43,7 +46,10 @@
             />
           </el-form-item>
           <el-form-item label="天数">
-            <el-input v-model="form.count" style="width: 370px;" />
+            <el-input v-model="form.count" :disabled="true" style="width: 370px;" />
+          </el-form-item>
+          <el-form-item label="不可拆分" prop="split">
+            <el-switch v-model="form.split" />
           </el-form-item>
           <el-form-item label="假期状态">
             <el-select v-model="form.status" filterable placeholder="请选择">
@@ -54,9 +60,6 @@
                 :value="item.value"
               />
             </el-select>
-          </el-form-item>
-          <el-form-item label="手机号" prop="phone">
-            <el-input v-model="form.phone" style="width: 370px;" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
@@ -79,6 +82,9 @@
           <template slot-scope="scope">
             <span>{{ parseTime(scope.row.endDate,'{y}-{m}-{d}') }}</span>
           </template>
+        </el-table-column>
+        <el-table-column prop="split" label="假期是否可以拆分">
+          <el-switch v-model="split" disabled />
         </el-table-column>
         <el-table-column prop="count" label="天数" />
         <el-table-column prop="status" label="假期状态">
@@ -156,6 +162,17 @@ export default {
       ]
     }
   },
+  watch: {
+    'form.rangeDate': function(newVal, oldVal) {
+      console.log(newVal)
+      console.log(oldVal)
+      console.log(this.getDiffDay(newVal[0], newVal[1]))
+      this.form.count = this.getDiffDay(newVal[0], newVal[1])
+    },
+    'form': function(newVal, oldVal) {
+      console.log('表单对象发生变化')
+    }
+  },
   methods: {
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {
@@ -171,6 +188,35 @@ export default {
       array.push(this.parseTime(form.startDate, '{y}-{m}-{d}'))
       array.push(this.parseTime(form.endDate, '{y}-{m}-{d}'))
       this.form.rangeDate = array
+    },
+    // 新增前做的操作
+    [CRUD.HOOK.beforeToAdd](crud, form) {
+      this.$store.dispatch('GetInfo').then(res => {
+        console.log(res.user.username)
+        console.log(res.user.dept.name)
+        console.log(res.user.phone)
+        this.form.userName = res.user.username
+        this.form.deptName = res.user.dept.name
+        this.form.phone = res.user.phone
+      })
+    },
+    // 新增取消后
+    [CRUD.HOOK.afterAddCancel](crud, form) {
+      this.$store.dispatch('GetInfo').then(res => {
+        this.form.rangeDate = ['', '']
+      })
+    },
+    // 获取两个时间之间的天数
+    getDiffDay(date_1, date_2) {
+      // 计算两个日期之间的差值
+      var totalDays, diffDate
+      var myDate_1 = Date.parse(date_1)
+      var myDate_2 = Date.parse(date_2)
+      // 将两个日期都转换为毫秒格式，然后做差
+      diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
+      totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
+      // console.log(totalDays)
+      return totalDays + 1
     }
   }
 }

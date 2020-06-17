@@ -386,3 +386,16 @@ export function downloadFile(obj, name, suffix) {
   link.click()
   document.body.removeChild(link)
 }
+
+// 获取两个时间之间的天数
+export function getDiffDay(date_1, date_2) {
+  // 计算两个日期之间的差值
+  var totalDays, diffDate
+  var myDate_1 = Date.parse(date_1)
+  var myDate_2 = Date.parse(date_2)
+  // 将两个日期都转换为毫秒格式，然后做差
+  diffDate = Math.abs(myDate_1 - myDate_2) // 取相差毫秒数的绝对值
+  totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
+  // console.log(totalDays)
+  return totalDays
+}
