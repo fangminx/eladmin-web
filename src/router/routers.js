@@ -185,8 +185,22 @@ export const constantRouterMap = [
       {
         path: 'center',
         component: (resolve) => require(['@/views/mydict'], resolve),
-        name: '我的字典',
-        meta: { title: '我的字典', icon: 'tab' }
+        name: '条件配置',
+        meta: { title: '条件配置', icon: 'tab' }
+      }
+    ]
+  },
+  {
+    path: '/config/user',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/config/user'], resolve),
+        name: '人员配置',
+        meta: { title: '人员配置', icon: 'tab' }
       }
     ]
   }

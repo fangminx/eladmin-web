@@ -143,6 +143,40 @@
                 />
               </el-select>
             </el-form-item>
+            <!-- <el-form-item style="margin-bottom: 0;" label="荣誉" prop="rytjs">
+              <el-select
+                v-model="form.rytjs"
+                style="width: 437px"
+                multiple
+                placeholder="请选择"
+                @remove-tag="deleteTag"
+                @change="changeRytj"
+              >
+                <el-option
+                  v-for="item in rytjs"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item>
+            <el-form-item style="margin-bottom: 0;" label="优惠" prop="yhtjs">
+              <el-select
+                v-model="form.yhtjs"
+                style="width: 437px"
+                multiple
+                placeholder="请选择"
+                @remove-tag="deleteTag"
+                @change="changeYhtj"
+              >
+                <el-option
+                  v-for="item in yhtjs"
+                  :key="item.label"
+                  :label="item.label"
+                  :value="item.id"
+                />
+              </el-select>
+            </el-form-item> -->
           </el-form>
           <div slot="footer" class="dialog-footer">
             <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -206,6 +240,7 @@ import crudUser from '@/api/system/user'
 import { isvalidPhone } from '@/utils/validate'
 import { getDepts, getDeptSuperior } from '@/api/system/dept'
 import { getAll, getLevel } from '@/api/system/role'
+// import { getAllCondition } from '@/api/mydict/dictDetail'
 import { getAllJob } from '@/api/system/job'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
@@ -218,6 +253,8 @@ import '@riophae/vue-treeselect/dist/vue-treeselect.css'
 import { LOAD_CHILDREN_OPTIONS } from '@riophae/vue-treeselect'
 let userRoles = []
 let userJobs = []
+// let rytjs = []
+// let yhtjs = []
 const defaultForm = { id: null, username: null, nickName: null, gender: '男', email: null, enabled: 'false', roles: [], jobs: [], dept: { id: null }, phone: null }
 export default {
   name: 'User',
@@ -286,6 +323,20 @@ export default {
     }
   },
   methods: {
+    // changeRytj(value) {
+    //   rytjs = []
+    //   value.forEach(function(data, index) {
+    //     const rytj = { id: data }
+    //     rytjs.push(rytj)
+    //   })
+    // },
+    // changeYhtj(value) {
+    //   yhtjs = []
+    //   value.forEach(function(data, index) {
+    //     const yhtj = { id: data }
+    //     yhtjs.push(yhtj)
+    //   })
+    // },
     changeRole(value) {
       userRoles = []
       value.forEach(function(data, index) {
@@ -343,8 +394,10 @@ export default {
       this.getJobs(this.form.dept.id)
       userRoles = []
       userJobs = []
+      // rytjs = []
       const roles = []
       const jobs = []
+      // const rys = []
       form.roles.forEach(function(role, index) {
         roles.push(role.id)
         // 初始化编辑时候的角色
@@ -357,8 +410,15 @@ export default {
         const data = { id: job.id }
         userJobs.push(data)
       })
+      // form.rys.forEach(function(ry, index) {
+      //   rys.push(ry.id)
+      //   // 初始化编辑时候的条件
+      //   const data = { id: ry.id }
+      //   rytjs.push(data)
+      // })
       form.roles = roles
       form.jobs = jobs
+      // form.rytjs = rytjs
     },
     // 提交前做的操作
     [CRUD.HOOK.afterValidateCU](crud) {
@@ -473,6 +533,12 @@ export default {
         this.roles = res
       }).catch(() => { })
     },
+    // // 获得弹窗内条件数据
+    // getConditons() {
+    //   getAllCondition().then(res => {
+    //     this.rytjs = res
+    //   }).catch(() => { })
+    // },
     // 获取弹窗内岗位数据
     getJobs() {
       getAllJob().then(res => {

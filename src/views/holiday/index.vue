@@ -51,7 +51,7 @@
           <el-form-item label="不可拆分" prop="split">
             <el-switch v-model="form.split" />
           </el-form-item>
-          <el-form-item label="假期状态">
+          <!-- <el-form-item label="假期状态">
             <el-select v-model="form.status" filterable placeholder="请选择">
               <el-option
                 v-for="item in dict.holiday_status"
@@ -60,7 +60,7 @@
                 :value="item.value"
               />
             </el-select>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -72,6 +72,7 @@
         <el-table-column type="selection" width="55" />
         <el-table-column prop="userName" label="用户名" />
         <el-table-column prop="deptName" label="部门名称" />
+        <el-table-column prop="phone" label="手机号" />
         <!-- <el-table-column prop="rangeDate" label="请假时间" /> -->
         <el-table-column prop="startDate" label="开始时间">
           <template slot-scope="scope">
@@ -83,16 +84,15 @@
             <span>{{ parseTime(scope.row.endDate,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="split" label="假期是否可以拆分">
+        <el-table-column prop="split" label="假期不可拆分">
           <el-switch v-model="split" disabled />
         </el-table-column>
         <el-table-column prop="count" label="天数" />
-        <el-table-column prop="status" label="假期状态">
+        <el-table-column prop="status" label="假期申请结果">
           <template slot-scope="scope">
             {{ dict.label.holiday_status[scope.row.status] }}
           </template>
         </el-table-column>
-        <el-table-column prop="phone" label="手机号" />
         <el-table-column v-permission="['admin','holidayRecord:edit','holidayRecord:del']" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation

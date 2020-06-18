@@ -52,7 +52,7 @@ export default {
             that.$notify({
               title: JSON.parse(msg.data).msg,
               // 这里也可以把返回信息加入到message中显示
-              message: '实时提醒服务连接成功，点击查看信息详情',
+              message: '实时提醒服务连接成功，点击查看详情',
               type: JSON.parse(msg.data).msgType,
               duration: 0,
               onClick: () => {
