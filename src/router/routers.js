@@ -100,20 +100,20 @@ export const constantRouterMap = [
   //     }
   //   ]
   // },
-  // {
-  //   path: '/submit',
-  //   component: Layout,
-  //   hidden: false,
-  //   redirect: 'noredirect',
-  //   children: [
-  //     {
-  //       path: 'center',
-  //       component: (resolve) => require(['@/views/submit'], resolve),
-  //       name: '请假申请',
-  //       meta: { title: '请假申请', icon: 'tab' }
-  //     }
-  //   ]
-  // },
+  {
+    path: '/submit',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/submit'], resolve),
+        name: 'submit',
+        meta: { title: 'submit', icon: 'tab' }
+      }
+    ]
+  },
   // {
   //   path: '/holiday',
   //   component: Layout,

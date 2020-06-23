@@ -26,11 +26,14 @@
           <el-form-item label="手机号" prop="userPhone">
             <el-input v-model="form.userPhone" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="条件类别" prop="condition">
-            未设置字典，请手动设置 Select
+          <!-- <el-form-item label="条件类别" prop="conditions">
+            <el-input v-model="form.conditions" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="条件项" prop="conditionItem">
-            未设置字典，请手动设置 Select
+            <el-input v-model="form.conditionItem" style="width: 370px;" />
+          </el-form-item> -->
+          <el-form-item label="条件选择" prop="condition_item">
+            <el-cascader ref="ref_condion" v-model="selectOption" :options="options" :props="condition_itemProps" placeholder="请选择对应条件" clearable style="width: 370px;" />
           </el-form-item>
           <el-form-item label="条件权重">
             <el-input v-model="form.conditionWeight" style="width: 370px;" />
@@ -47,7 +50,7 @@
         <el-table-column prop="userName" label="用户名" />
         <el-table-column prop="deptName" label="部门名称" />
         <el-table-column prop="userPhone" label="手机号" />
-        <el-table-column prop="condition" label="条件类别" />
+        <el-table-column prop="conditions" label="条件类别" />
         <el-table-column prop="conditionItem" label="条件项" />
         <el-table-column prop="conditionWeight" label="条件权重" />
         <el-table-column v-permission="['admin','configUser:edit','configUser:del']" label="操作" width="150px" align="center">
@@ -72,8 +75,9 @@ import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
 import udOperation from '@crud/UD.operation'
 import pagination from '@crud/Pagination'
+import { getAllConditions } from '@/api/mydict/dict'
 
-const defaultForm = { id: null, userName: null, deptName: null, userPhone: null, condition: null, conditionItem: null, conditionWeight: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
+const defaultForm = { id: null, userName: null, deptName: null, userPhone: null, conditions: null, conditionItem: null, conditionWeight: null, createBy: null, updateBy: null, createTime: null, updateTime: null }
 export default {
   name: 'ConfigUser',
   components: { pagination, crudOperation, rrOperation, udOperation },
@@ -98,12 +102,28 @@ export default {
         userPhone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' }
         ],
-        condition: [
-          { required: true, message: '条件类别不能为空', trigger: 'blur' }
-        ],
-        conditionItem: [
-          { required: true, message: '条件项不能为空', trigger: 'blur' }
-        ]
+        // conditions: [
+        //   { required: true, message: '条件类别不能为空', trigger: 'blur' }
+        // ],
+        // conditionItem: [
+        //   { required: true, message: '条件项不能为空', trigger: 'blur' }
+        // ],
+        condition_item: [{
+          required: false,
+          type: 'array',
+          message: '请选择一个个条件',
+          trigger: 'blur'
+        }]
+      },
+      options: [
+      ],
+      selectOption: [
+      ],
+      condition_itemProps: {
+        'multiple': false,
+        'label': 'label',
+        'value': 'value',
+        'children': 'children'
       },
       queryTypeOptions: [
         { key: 'userName', display_name: '用户名' },
@@ -112,11 +132,63 @@ export default {
       ]
     }
   },
+  watch: {
+    'selectOption': function(newVal, oldVal) {
+      // 选中级联填充表单对应的2个字段
+      var condi = this.$refs['ref_condion'].getCheckedNodes()[0].pathLabels
+      var arr = condi.toString().split(',')
+      this.form.conditions = arr[0]
+      this.form.conditionItem = arr[1]
+
+      // 选中级联自动获取权重
+      var item = newVal
+      item = item.slice(1, item.length)
+      for (var i = 0; i < this.options.length; i++) {
+        for (var j = 0; j < this.options[i].children.length; j++) {
+          if (this.options[i].children[j].label == item) {
+            this.form.conditionWeight = this.options[i].children[j].weight
+          }
+        }
+      }
+    }
+
+  },
   methods: {
     // 钩子：在获取表格数据之前执行，false 则代表不获取数据
     [CRUD.HOOK.beforeRefresh]() {
       return true
+    },
+    // 新增前做的操作
+    [CRUD.HOOK.beforeToAdd](crud, form) {
+      this.selectOption = ','
+      getAllConditions().then(res => {
+        this.options = res
+      })
+    },
+    // 打开编辑弹窗前做的操作
+    [CRUD.HOOK.beforeToEdit](crud, form) {
+      this.selectOption = ','
+      getAllConditions().then(res => {
+        this.options = res
+      })
     }
+    //     conditionChange(item) {
+    //       // 获取选中的级联结果
+    //       console.log('ref:' + this.$refs['ref_condion'].getCheckedNodes()[0].pathLabels)
+    //       console.log('item:' + item)
+    //       item = item.slice(1, item.length)
+    //       for(var i = 0; i < this.options.length; i++) {
+    //         for(var j = 0; j < this.options[i].children.length; j++){
+    //           console.log(this.options[i].children[j].label)
+    //           console.log('label:' + item)
+    //           if(this.options[i].children[j].label == item){
+    //             console.log('weightttttttttttttt:' + this.options[i].children[j].weight)
+    //             this.form.weight = this.options[i].children[j].weight
+    //             console.log('weightformmmmmmmmmmmmmm:' + this.form.weight)
+    //           }
+    //         }
+    //       }
+    //     }
   }
 }
 </script>

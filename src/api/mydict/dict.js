@@ -31,4 +31,11 @@ export function edit(data) {
   })
 }
 
+export function getAllConditions() {
+  return request({
+    url: 'api/mydict/all/condition',
+    method: 'get'
+  })
+}
+
 export default { add, edit, del }

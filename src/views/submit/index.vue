@@ -1,54 +1,9 @@
 <template>
   <div>
-    <aside style="margin-top:15px;">
-      请提交请假申请
-    </aside>
     <el-form ref="elForm" :model="formData" :rules="rules" size="medium" label-width="100px">
-      <el-row gutter="15">
-        <el-col :span="15">
-          <el-form-item label="姓名：" prop="name">
-            <el-input v-model="formData.name" placeholder="请输入姓名：" clearable :style="{width: '100%'}" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="15">
-          <el-form-item label="所在部门：" prop="dept">
-            <el-select v-model="formData.dept" placeholder="请选择所在部门：" clearable :style="{width: '100%'}">
-              <el-option
-                v-for="(item, index) in deptOptions"
-                :key="index"
-                :label="item.label"
-                :value="item.value"
-                :disabled="item.disabled"
-              />
-            </el-select>
-          </el-form-item>
-        </el-col>
-        <el-col :span="15">
-          <el-form-item label="请假时间：" prop="qj_date">
-            <el-date-picker
-              v-model="formData.qj_date"
-              type="daterange"
-              format="yyyy-MM-dd"
-              value-format="yyyy-MM-dd"
-              :style="{width: '100%'}"
-              start-placeholder="开始日期"
-              end-placeholder="结束日期"
-              range-separator="至"
-              clearable
-            />
-          </el-form-item>
-        </el-col>
-        <el-col :span="15">
-          <el-form-item label="请假天数：" prop="date_num">
-            <el-input-number v-model="formData.date_num" :disabled="true" />
-          </el-form-item>
-        </el-col>
-        <el-col :span="15">
-          <el-form-item label="优先竞选：" prop="youxian">
-            <el-switch v-model="formData.youxian" />
-          </el-form-item>
-        </el-col>
-      </el-row>
+      <el-form-item label="条件选择" prop="condition_item">
+        <el-cascader v-model="formData.condition_itemOptions" :options="condition_itemOptions" :props="condition_itemProps" placeholder="请选择对应条件" clearable />
+      </el-form-item>
       <el-form-item size="large">
         <el-button type="primary" @click="submitForm">提交</el-button>
         <el-button @click="resetForm">重置</el-button>
@@ -57,136 +12,77 @@
   </div>
 </template>
 <script>
-// import { test } from '@/api/websocket/test'
+import { getAllConditions } from '@/api/mydict/dict'
 export default {
   components: {},
   props: [],
   data() {
     return {
       formData: {
-        name: undefined,
-        dept: undefined,
-        qj_date: ['', ''],
-        date_num: undefined,
-        youxian: false
+        condition_item: [],
+        condition_itemOptions: []
       },
       rules: {
-        name: [{
-          required: true,
-          message: '请输入姓名：',
-          trigger: 'blur'
-        }],
-        dept: [{
-          required: true,
-          message: '请选择所在部门：',
-          trigger: 'change'
-        }],
-        qj_date: [{
+        condition_item: [{
           required: true,
           type: 'array',
-          message: '请至少选择一个qj_date',
+          message: '请至少选择一个级联选择',
           trigger: 'change'
-        }],
-        date_num: []
+        }]
       },
-      deptOptions: [{
-        'label': '研发部',
-        'value': 1
-      }, {
-        'label': '运维部',
-        'value': 2
-      }]
+      condition_itemOptions: [{
+        'id': 1,
+        'value': 1,
+        'label': '选项1',
+        'children': [{
+          'id': 2,
+          'value': 2,
+          'label': '选项1-1'
+        },
+        {
+          'id': 3,
+          'value': 3,
+          'label': '选项1-2'
+        }]
+      }],
+      condition_itemProps: {
+        'multiple': false,
+        'label': 'label',
+        'value': 'value',
+        'children': 'children'
+      }
     }
   },
-  computed: {},
-  watch: {},
-  created() {
-    // 连接webSocket，用于接收后台实时报警信息推送
-    this.webSocket()
+  watch: {
+    'formData.condition_itemOptions': function(newVal, oldVal) {
+      console.log(newVal)
+      console.log(oldVal)
+    },
+    'formData': function(newVal, oldVal) {
+      console.log('表单对象发生变化')
+      this.formData.condition_itemOptions = newVal
+    }
   },
-  mounted() {}
-  // methods: {
-  //   test() {
-  //     this.loading = true
-  //     test().then(response => {
-  //     })
-  //   },
-  //   webSocket() {
-  //     console.log('进入wedsocket前端方法')
-  //     const that = this
-  //     if (typeof (WebSocket) === 'undefined') {
-  //       this.$notify({
-  //         title: '提示',
-  //         message: '当前浏览器无法接收实时报警信息，请使用谷歌浏览器！',
-  //         type: 'warning',
-  //         duration: 0
-  //       })
-  //     } else {
-  //       // 获取token保存到vuex中的用户信息，此处仅适用于本项目，注意删除或修改
-  //       // store.dispatch('GetInfo').then(info => {
-  //       // 实例化socket，这里我把用户名传给了后台，使后台能判断要把消息发给哪个用户，其实也可以后台直接获取用户IP来判断并推送
-  //       // const socketUrl = 'ws://127.0.0.1:8000/websocket/' + info.username;
-  //       console.log('进入else代码，开始连接对应的ws地址')
-  //       this.socket = new WebSocket('ws://localhost:8000/webSocket/test')
-  //       // 监听socket打开
-  //       this.socket.onopen = function() {
-  //         console.log('浏览器WebSocket已打开')
-  //       }
-  //       // 监听socket消息接收
-  //       this.socket.onmessage = function(msg) {
-  //         console.log('开始接受socket消息，消息为' + msg.data)
-  //         console.log('开始接受socket消息，消息为' + JSON.parse(msg.data).msg)
-  //         // 转换为json对象
-  //         // const data = JSON.parse(msg.data)
-  //         that.$notify({
-  //           title: JSON.parse(msg.data).msg,
-  //           // 这里也可以把返回信息加入到message中显示
-  //           message: '实时提醒服务连接成功，点击查看信息详情',
-  //           type: JSON.parse(msg.data).msgType,
-  //           duration: 0,
-  //           onClick: () => {
-  //             that.$router.push({
-  //               path: '/alarmManage/monitAlarmInfo'
-  //             })
-  //           }
-  //         })
-  //       }
-  //       // 监听socket错误
-  //       this.socket.onerror = function() {
-  //         that.$notify({
-  //           title: '错误',
-  //           message: '服务器错误，无法接收实时报警信息',
-  //           type: 'error',
-  //           duration: 0
-  //         })
-  //       }
-  //       // 监听socket关闭
-  //       this.socket.onclose = function() {
-  //         console.log('WebSocket已关闭')
-  //       }
-  //     }
-  //   },
-  //   submitForm() {
-  //     this.$refs['elForm'].validate(valid => {
-  //       if (valid) {
-  //       // TODO 提交表单
-  //       // this.notify('请假状态有变化，请修改', 'error')
-  //         test()
-  //         this.webSocket()
-  //         // this.$notify({
-  //         //   title: '请假状态有变化，请修改',
-  //         //   type: 'success',
-  //         //   duration: 2500
-  //         // })
-  //       } else {
-  //         return
-  //       }
-  //     })
-  //   },
-  //   resetForm() {
-  //     this.$refs['elForm'].resetFields()
-  //   }
-  // }
+  methods: {
+    submitForm() {
+      this.$refs['elForm'].validate(valid => {
+        if (!valid) return
+        // TODO 提交表单
+      })
+    },
+    resetForm() {
+      // this.$refs['elForm'].resetFields()
+      console.log(this.formData.condition_itemOptions)
+      this.getCondition_itemOptions()
+      console.log(this.formData.condition_itemOptions)
+    },
+    getCondition_itemOptions() {
+      // TODO 发起请求获取数据
+      getAllConditions().then(res => {
+        this.formData.condition_itemOptions = res
+      })
+    }
+  }
 }
 
 </script>
