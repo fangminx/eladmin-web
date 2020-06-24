@@ -95,25 +95,25 @@ export const constantRouterMap = [
   //     {
   //       path: 'center',
   //       component: (resolve) => require(['@/views/config/people'], resolve),
-  //       name: '人员配置',
-  //       meta: { title: '人员配置', icon: 'edit' }
+  //       name: '人员条件',
+  //       meta: { title: '人员条件', icon: 'edit' }
   //     }
   //   ]
   // },
-  {
-    path: '/submit',
-    component: Layout,
-    hidden: false,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'center',
-        component: (resolve) => require(['@/views/submit'], resolve),
-        name: 'submit',
-        meta: { title: 'submit', icon: 'tab' }
-      }
-    ]
-  },
+  // {
+  //   path: '/submit',
+  //   component: Layout,
+  //   hidden: false,
+  //   redirect: 'noredirect',
+  //   children: [
+  //     {
+  //       path: 'center',
+  //       component: (resolve) => require(['@/views/submit'], resolve),
+  //       name: 'submit',
+  //       meta: { title: 'submit', icon: 'tab' }
+  //     }
+  //   ]
+  // },
   // {
   //   path: '/holiday',
   //   component: Layout,
@@ -190,6 +190,7 @@ export const constantRouterMap = [
       }
     ]
   },
+  
   {
     path: '/config/user',
     component: Layout,
@@ -199,8 +200,22 @@ export const constantRouterMap = [
       {
         path: 'center',
         component: (resolve) => require(['@/views/config/user'], resolve),
-        name: '人员配置',
-        meta: { title: '人员配置', icon: 'tab' }
+        name: '用户条件关系',
+        meta: { title: '用户条件关系', icon: 'edit' }
+      }
+    ]
+  },
+  {
+    path: '/config/param',
+    component: Layout,
+    hidden: false,
+    redirect: 'noredirect',
+    children: [
+      {
+        path: 'center',
+        component: (resolve) => require(['@/views/config/param'], resolve),
+        name: '参数配置',
+        meta: { title: '参数配置', icon: 'edit' }
       }
     ]
   }

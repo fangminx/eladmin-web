@@ -48,9 +48,9 @@
           <el-form-item label="天数">
             <el-input v-model="form.count" :disabled="true" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="不可拆分" prop="split">
+          <!-- <el-form-item label="不可拆分" prop="split">
             <el-switch v-model="form.split" />
-          </el-form-item>
+          </el-form-item> -->
           <!-- <el-form-item label="假期状态">
             <el-select v-model="form.status" filterable placeholder="请选择">
               <el-option
@@ -84,14 +84,14 @@
             <span>{{ parseTime(scope.row.endDate,'{y}-{m}-{d}') }}</span>
           </template>
         </el-table-column>
-        <el-table-column prop="split" label="假期不可拆分">
+        <!-- <el-table-column prop="split" label="假期不可拆分">
           <el-switch v-model="split" disabled />
-        </el-table-column>
+        </el-table-column> -->
         <el-table-column prop="count" label="天数" />
         <el-table-column prop="status" label="假期申请结果">
-          <template slot-scope="scope">
+          <!-- <template slot-scope="scope">
             {{ dict.label.holiday_status[scope.row.status] }}
-          </template>
+          </template> -->
         </el-table-column>
         <el-table-column v-permission="['admin','holidayRecord:edit','holidayRecord:del']" label="操作" width="150px" align="center">
           <template slot-scope="scope">

@@ -6,26 +6,26 @@
         <!-- 搜索 -->
         <label class="el-form-item-label">用户名</label>
         <el-input v-model="query.userName" clearable placeholder="用户名" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
-        <label class="el-form-item-label">部门名称</label>
+        <!-- <label class="el-form-item-label">部门名称</label>
         <el-input v-model="query.deptName" clearable placeholder="部门名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <label class="el-form-item-label">手机号</label>
-        <el-input v-model="query.userPhone" clearable placeholder="手机号" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <el-input v-model="query.userPhone" clearable placeholder="手机号" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" /> -->
         <rrOperation :crud="crud" />
       </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
-      <crudOperation :permission="permission" />
+      <crudOperation />
       <!--表单组件-->
       <el-dialog :close-on-click-modal="false" :before-close="crud.cancelCU" :visible.sync="crud.status.cu > 0" :title="crud.status.title" width="500px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
           <el-form-item label="用户名" prop="userName">
             <el-input v-model="form.userName" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="部门名称" prop="deptName">
+          <!-- <el-form-item label="部门名称" prop="deptName">
             <el-input v-model="form.deptName" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="手机号" prop="userPhone">
             <el-input v-model="form.userPhone" style="width: 370px;" />
-          </el-form-item>
+          </el-form-item> -->
           <!-- <el-form-item label="条件类别" prop="conditions">
             <el-input v-model="form.conditions" style="width: 370px;" />
           </el-form-item>
@@ -48,19 +48,19 @@
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
         <el-table-column type="selection" width="55" />
         <el-table-column prop="userName" label="用户名" />
-        <el-table-column prop="deptName" label="部门名称" />
-        <el-table-column prop="userPhone" label="手机号" />
+        <!-- <el-table-column prop="deptName" label="部门名称" />
+        <el-table-column prop="userPhone" label="手机号" /> -->
         <el-table-column prop="conditions" label="条件类别" />
         <el-table-column prop="conditionItem" label="条件项" />
         <el-table-column prop="conditionWeight" label="条件权重" />
-        <el-table-column v-permission="['admin','configUser:edit','configUser:del']" label="操作" width="150px" align="center">
+        <!-- <el-table-column v-permission="['admin','configUser:edit','configUser:del']" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
               :permission="permission"
             />
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <!--分页组件-->
       <pagination />
@@ -83,7 +83,7 @@ export default {
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
   cruds() {
-    return CRUD({ title: '用户荣誉条件配置', url: 'api/configUser', sort: 'id,desc', crudMethod: { ...crudConfigUser }})
+    return CRUD({ title: '用户条件配置', url: 'api/configUser', sort: 'id,desc', crudMethod: { ...crudConfigUser }})
   },
   data() {
     return {
@@ -96,12 +96,12 @@ export default {
         userName: [
           { required: true, message: '用户名不能为空', trigger: 'blur' }
         ],
-        deptName: [
-          { required: true, message: '部门名称不能为空', trigger: 'blur' }
-        ],
-        userPhone: [
-          { required: true, message: '手机号不能为空', trigger: 'blur' }
-        ],
+        // deptName: [
+        //   { required: true, message: '部门名称不能为空', trigger: 'blur' }
+        // ],
+        // userPhone: [
+        //   { required: true, message: '手机号不能为空', trigger: 'blur' }
+        // ],
         // conditions: [
         //   { required: true, message: '条件类别不能为空', trigger: 'blur' }
         // ],
@@ -111,7 +111,7 @@ export default {
         condition_item: [{
           required: false,
           type: 'array',
-          message: '请选择一个个条件',
+          message: '请选择一个条件',
           trigger: 'blur'
         }]
       },

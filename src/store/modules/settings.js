@@ -5,7 +5,7 @@ const { tagsView, fixedHeader, sidebarLogo, uniqueOpened, showFooter, footerTxt,
 const state = {
   theme: variables.theme,
   showSettings: false,
-  tagsView: tagsView,
+  tagsView: false,
   fixedHeader: fixedHeader,
   sidebarLogo: sidebarLogo,
   uniqueOpened: uniqueOpened,

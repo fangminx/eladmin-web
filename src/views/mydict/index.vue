@@ -3,7 +3,7 @@
     <!--表单组件-->
     <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible="crud.status.cu > 0" :title="crud.status.title" width="500px">
       <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-        <el-form-item label="字典名称" prop="name">
+        <el-form-item label="条件名称" prop="name">
           <el-input v-model="form.name" style="width: 370px;" />
         </el-form-item>
         <el-form-item label="描述">
@@ -26,14 +26,15 @@
               <el-input v-model="query.blurry" clearable size="small" placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
               <rrOperation />
             </div>
-            <crudOperation :permission="permission" />
+            <!-- <crudOperation :permission="permission" /> -->
+            <crudOperation />
           </div>
           <!--表格渲染-->
           <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row style="width: 100%;" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange">
             <el-table-column type="selection" width="55" />
             <el-table-column :show-overflow-tooltip="true" prop="name" label="名称" />
             <el-table-column :show-overflow-tooltip="true" prop="description" label="描述" />
-            <el-table-column v-permission="['admin','mydict:edit','mydict:del']" label="操作" width="130px" align="center" fixed="right">
+            <el-table-column label="操作" width="130px" align="center" fixed="right">
               <template slot-scope="scope">
                 <udOperation
                   :data="scope.row"
@@ -50,9 +51,9 @@
       <el-col :xs="24" :sm="24" :md="14" :lg="13" :xl="13">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>字典详情</span>
+            <span>条件详情</span>
             <el-button
-              v-if="checkPermission(['admin','mydict:add']) && this.$refs.dictDetail && this.$refs.dictDetail.query.dictName"
+              v-if="this.$refs.dictDetail && this.$refs.dictDetail.query.dictName"
               class="filter-item"
               size="mini"
               style="float: right;padding: 4px 10px"
@@ -61,6 +62,7 @@
               @click="$refs.dictDetail && $refs.dictDetail.crud.toAdd()"
             >新增</el-button>
           </div>
+          <!-- <dictDetail ref="dictDetail" :permission="permission" /> -->
           <dictDetail ref="dictDetail" :permission="permission" />
         </el-card>
       </el-col>
@@ -85,14 +87,14 @@ export default {
   components: { crudOperation, pagination, rrOperation, udOperation, dictDetail },
   cruds() {
     return [
-      CRUD({ title: '字典', url: 'api/mydict', crudMethod: { ...crudDict }})
+      CRUD({ title: '条件配置', url: 'api/mydict', crudMethod: { ...crudDict }})
     ]
   },
   mixins: [presenter(), header(), form(defaultForm)],
   data() {
     return {
       queryTypeOptions: [
-        { key: 'name', display_name: '字典名称' },
+        { key: 'name', display_name: '条件名称' },
         { key: 'description', display_name: '描述' }
       ],
       rules: {

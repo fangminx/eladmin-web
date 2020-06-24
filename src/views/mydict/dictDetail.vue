@@ -8,20 +8,20 @@
       <div class="head-container">
         <div v-if="crud.props.searchToggle">
           <!-- 搜索 -->
-          <el-input v-model="query.label" clearable size="small" placeholder="输入字典标签查询" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
+          <el-input v-model="query.label" clearable size="small" placeholder="输入条件查询" style="width: 200px;" class="filter-item" @keyup.enter.native="toQuery" />
           <rrOperation />
         </div>
       </div>
       <!--表单组件-->
       <el-dialog append-to-body :close-on-click-modal="false" :before-close="crud.cancelCU" :visible="crud.status.cu > 0" :title="crud.status.title" width="500px">
         <el-form ref="form" :model="form" :rules="rules" size="small" label-width="80px">
-          <el-form-item label="字典标签" prop="label">
+          <el-form-item label="条件" prop="label">
             <el-input v-model="form.label" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="字典值" prop="value">
+          <el-form-item label="条件内容" prop="value">
             <el-input v-model="form.value" style="width: 370px;" />
           </el-form-item>
-          <el-form-item label="权重" prop="weight">
+          <el-form-item label="条件权重" prop="weight">
             <el-input v-model="form.weight" style="width: 370px;" />
           </el-form-item>
           <el-form-item label="排序" prop="dictSort">
@@ -35,12 +35,12 @@
       </el-dialog>
       <!--表格渲染-->
       <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row style="width: 100%;" @selection-change="crud.selectionChangeHandler">
-        <el-table-column label="所属字典">
+        <el-table-column label="所属条件">
           {{ query.dictName }}
         </el-table-column>
-        <el-table-column prop="label" label="字典标签" />
-        <el-table-column prop="value" label="字典值" />
-        <el-table-column prop="weight" label="权重" />
+        <el-table-column prop="label" label="条件" />
+        <el-table-column prop="value" label="条件内容" />
+        <el-table-column prop="weight" label="条件权重" />
         <el-table-column prop="dictSort" label="排序" />
         <el-table-column v-permission="['admin','mydict:edit','mydict:del']" label="操作" width="130px" align="center" fixed="right">
           <template slot-scope="scope">
@@ -71,7 +71,7 @@ export default {
   components: { pagination, rrOperation, udOperation },
   cruds() {
     return [
-      CRUD({ title: '字典详情', url: 'api/mydictDetail', query: { dictName: '' }, sort: ['dictSort,asc', 'id,desc'],
+      CRUD({ title: '条件详情', url: 'api/mydictDetail', query: { dictName: '' }, sort: ['dictSort,asc', 'id,desc'],
         crudMethod: { ...crudDictDetail },
         optShow: { add: true,
           edit: true,
@@ -93,10 +93,10 @@ export default {
       dictId: null,
       rules: {
         label: [
-          { required: true, message: '请输入字典标签', trigger: 'blur' }
+          { required: true, message: '请输入条件标签', trigger: 'blur' }
         ],
         value: [
-          { required: true, message: '请输入字典值', trigger: 'blur' }
+          { required: true, message: '请输入条件', trigger: 'blur' }
         ],
         dictSort: [
           { required: true, message: '请输入序号', trigger: 'blur', type: 'number' }
