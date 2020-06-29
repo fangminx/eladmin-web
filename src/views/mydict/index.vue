@@ -26,8 +26,7 @@
               <el-input v-model="query.blurry" clearable size="small" placeholder="输入名称或者描述搜索" style="width: 200px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
               <rrOperation />
             </div>
-            <!-- <crudOperation :permission="permission" /> -->
-            <crudOperation />
+            <crudOperation :permission="permission" />
           </div>
           <!--表格渲染-->
           <el-table ref="table" v-loading="crud.loading" :data="crud.data" highlight-current-row style="width: 100%;" @selection-change="crud.selectionChangeHandler" @current-change="handleCurrentChange">
@@ -53,7 +52,7 @@
           <div slot="header" class="clearfix">
             <span>条件详情</span>
             <el-button
-              v-if="this.$refs.dictDetail && this.$refs.dictDetail.query.dictName"
+              v-if="checkPermission(['admin','mydict:add']) && this.$refs.dictDetail && this.$refs.dictDetail.query.dictName"
               class="filter-item"
               size="mini"
               style="float: right;padding: 4px 10px"
@@ -62,7 +61,6 @@
               @click="$refs.dictDetail && $refs.dictDetail.crud.toAdd()"
             >新增</el-button>
           </div>
-          <!-- <dictDetail ref="dictDetail" :permission="permission" /> -->
           <dictDetail ref="dictDetail" :permission="permission" />
         </el-card>
       </el-col>

@@ -59,7 +59,7 @@ export default {
               onClick: () => {
                 that.$router.push({
                   // path: '/holiday/ref/index'
-                  path: '/holiday/index'
+                  path: '/holidayRecord/index'
                 })
               }
             })

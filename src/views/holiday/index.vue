@@ -129,9 +129,9 @@ export default {
   data() {
     return {
       permission: {
-        // add: ['admin', 'holidayRecord:add'],
-        // edit: ['admin', 'holidayRecord:edit'],
-        // del: ['admin', 'holidayRecord:del']
+        add: ['admin', 'holidayRecord:add'],
+        edit: ['admin', 'holidayRecord:edit'],
+        del: ['admin', 'holidayRecord:del']
       },
       rules: {
         userName: [

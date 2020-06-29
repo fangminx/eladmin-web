@@ -129,23 +129,13 @@ export const constantRouterMap = [
   //   ]
   // },
   // {
-  //   name: 'holiday', // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
+  //   name: 'HolidayRecord', // 设定路由的名字，一定要填写不然使用<keep-alive>时会出现各种问题
   //   meta: {
   //     title: '请假记录', // 设置该路由在侧边栏和面包屑中展示的名字
   //     icon: 'tab', // 设置该路由的图标
   //     noCache: true, // 如果设置为true，则不会被 <keep-alive> 缓存(默认 false)
   //     breadcrumb: true, // 如果设置为false，则不会在breadcrumb面包屑中显示,
   //     affix: true // 设置成true表示，tag-view不可删除
-  //   }
-  // },
-  // {
-  //   name: 'holiday/ref',
-  //   meta: {
-  //     title: '参考假日',
-  //     icon: 'tab',
-  //     noCache: true,
-  //     breadcrumb: true,
-  //     affix: true
   //   }
   // },
   // {
@@ -176,20 +166,20 @@ export const constantRouterMap = [
   //     }
   //   ]
   // },
-  {
-    path: '/mydict',
-    component: Layout,
-    hidden: false,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'center',
-        component: (resolve) => require(['@/views/mydict'], resolve),
-        name: '条件配置',
-        meta: { title: '条件配置', icon: 'tab' }
-      }
-    ]
-  },
+  // {
+  //   path: '/mydict',
+  //   component: Layout,
+  //   hidden: false,
+  //   redirect: 'noredirect',
+  //   children: [
+  //     {
+  //       path: 'center',
+  //       component: (resolve) => require(['@/views/mydict'], resolve),
+  //       name: '条件配置',
+  //       meta: { title: '条件配置', icon: 'tab' }
+  //     }
+  //   ]
+  // },
   
   {
     path: '/config/user',
@@ -205,20 +195,20 @@ export const constantRouterMap = [
       }
     ]
   },
-  {
-    path: '/config/param',
-    component: Layout,
-    hidden: false,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'center',
-        component: (resolve) => require(['@/views/config/param'], resolve),
-        name: '参数配置',
-        meta: { title: '参数配置', icon: 'edit' }
-      }
-    ]
-  }
+  // {
+  //   path: '/config/param',
+  //   component: Layout,
+  //   hidden: false,
+  //   redirect: 'noredirect',
+  //   children: [
+  //     {
+  //       path: 'center',
+  //       component: (resolve) => require(['@/views/config/param'], resolve),
+  //       name: '参数配置',
+  //       meta: { title: '参数配置', icon: 'edit' }
+  //     }
+  //   ]
+  // }
 ]
 
 export default new Router({
