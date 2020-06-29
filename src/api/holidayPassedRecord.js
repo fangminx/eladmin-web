@@ -24,4 +24,15 @@ export function edit(data) {
   })
 }
 
+export function getPassedRecord(id) {
+  const params = {
+    id
+  }
+  return request({
+    url: 'api/holidayPassedRecord/record',
+    method: 'get',
+    params,
+  })
+}
+
 export default { add, edit, del }

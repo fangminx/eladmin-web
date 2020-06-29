@@ -68,7 +68,7 @@
         </div>
       </el-dialog>
       <!--表格渲染-->
-      <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler">
+      <el-table ref="table" v-loading="crud.loading" :data="crud.data" size="small" style="width: 100%;" @selection-change="crud.selectionChangeHandler" @row-click="open">
         <el-table-column type="selection" width="55" />
         <el-table-column prop="userName" label="用户名" />
         <el-table-column prop="deptName" label="部门名称" />
@@ -93,14 +93,14 @@
             {{ dict.label.holiday_status[scope.row.status] }}
           </template> -->
         </el-table-column>
-        <el-table-column v-permission="['admin','holidayRecord:edit','holidayRecord:del']" label="操作" width="150px" align="center">
+        <!-- <el-table-column v-permission="['admin','holidayRecord:edit','holidayRecord:del']" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
               :data="scope.row"
               :permission="permission"
             />
           </template>
-        </el-table-column>
+        </el-table-column> -->
       </el-table>
       <!--分页组件-->
       <pagination />
@@ -110,6 +110,7 @@
 
 <script>
 import crudHolidayRecord from '@/api/holidayRecord'
+import { getPassedRecord } from '@/api/holidayPassedRecord'
 import CRUD, { presenter, header, form, crud } from '@crud/crud'
 import rrOperation from '@crud/RR.operation'
 import crudOperation from '@crud/CRUD.operation'
@@ -217,6 +218,29 @@ export default {
       totalDays = Math.floor(diffDate / (1000 * 3600 * 24)) // 向下取整
       // console.log(totalDays)
       return totalDays + 1
+    },
+    open(val) {
+      if (val && val.status == '被抵消') {
+        getPassedRecord(val.id).then(res => {
+          var text = ''
+          var passUser = '被抵消用户： ' + res.passedUser
+          var passWeight = '被抵消用户权重： ' + res.passedWeight
+          var priUser = '高优先级用户： ' + res.priorityUser
+          var priWeight = ' 高优先级用户权重： ' + res.priorityWeight
+
+          text += '<div style="background:#ffffff; color:#ff0000">' + passUser + '</div>'
+          text += '<div style="background:#ffffff; color:#ff0000">' + passWeight + '</div>'
+          text += '<div style="background:#ffffff; color:#00ff00">' + priUser + '</div>'
+          text += '<div style="background:#ffffff; color:#00ff00">' + priWeight + '</div>'
+
+          
+    
+          this.$alert(text, '被抵消详情', {
+            confirmButtonText: '确定',
+            dangerouslyUseHTMLString: true
+          });
+        })  
+      }
     }
   }
 }
