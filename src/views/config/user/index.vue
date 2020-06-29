@@ -171,6 +171,13 @@ export default {
       getAllConditions().then(res => {
         this.options = res
       })
+    },
+    // 打开编辑弹窗前做的操作
+    [CRUD.HOOK.afterAddError](crud, form) {
+      this.$notify.error({
+          title: '校验失败',
+          message: '请仔细检查用户名是否正确以及该用户的条件配置是否符合逻辑'
+        });
     }
     //     conditionChange(item) {
     //       // 获取选中的级联结果
