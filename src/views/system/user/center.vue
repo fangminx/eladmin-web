@@ -24,6 +24,8 @@
               <li><svg-icon icon-class="dept" /> 所属部门 <div class="user-right"> {{ user.dept.name }}</div></li>
               <li><svg-icon icon-class="phone" /> 手机号码 <div class="user-right">{{ user.phone }}</div></li>
               <li><svg-icon icon-class="email" /> 用户邮箱 <div class="user-right">{{ user.email }}</div></li>
+              <li><svg-icon icon-class="tab" /> 假期总数 <div class="user-right">{{ holiday[0] }}</div></li>
+              <li><svg-icon icon-class="tab" /> 剩余假期 <div class="user-right">{{ holiday[0] - holiday[1] }}</div></li>
               <li>
                 <svg-icon icon-class="anq" /> 安全设置
                 <div class="user-right">
@@ -116,6 +118,7 @@ import { parseTime } from '@/utils/index'
 import crud from '@/mixins/crud'
 import { editUser } from '@/api/system/user'
 import Avatar from '@/assets/images/avatar.png'
+import { getHoliday } from '@/api/configUser'
 export default {
   name: 'Center',
   components: { updatePass, updateEmail, myUpload },
@@ -140,6 +143,7 @@ export default {
         'Authorization': getToken()
       },
       form: {},
+      holiday: [],
       rules: {
         nickName: [
           { required: true, message: '请输入用户昵称', trigger: 'blur' },
@@ -160,7 +164,12 @@ export default {
   },
   created() {
     this.form = { id: this.user.id, nickName: this.user.nickName, gender: this.user.gender, phone: this.user.phone }
+    getHoliday(this.user.username).then(res => {
+      console.log(res)
+      this.holiday = res
+    })
     store.dispatch('GetInfo').then(() => {})
+    
   },
   methods: {
     parseTime,

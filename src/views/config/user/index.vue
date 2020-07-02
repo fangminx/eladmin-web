@@ -36,7 +36,7 @@
             <el-cascader ref="ref_condion" v-model="selectOption" :options="options" :props="condition_itemProps" placeholder="请选择对应条件" clearable style="width: 370px;" />
           </el-form-item>
           <el-form-item label="条件权重">
-            <el-input v-model="form.conditionWeight" style="width: 370px;" />
+            <el-input v-model="form.conditionWeight" :disabled="true" style="width: 370px;" />
           </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">

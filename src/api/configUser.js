@@ -24,4 +24,15 @@ export function edit(data) {
   })
 }
 
+export function getHoliday(userName) {
+  const params = {
+    userName
+  }
+  return request({
+    url: 'api/configUser/day',
+    method: 'get',
+    params,
+  })
+}
+
 export default { add, edit, del }
