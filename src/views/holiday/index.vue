@@ -10,6 +10,24 @@
         <el-input v-model="query.deptName" clearable placeholder="部门名称" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
         <label class="el-form-item-label">手机号</label>
         <el-input v-model="query.phone" clearable placeholder="手机号" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery" />
+        <label class="el-form-item-label">请假类型</label>
+        <el-select v-model="query.type" clearable placeholder="请选择" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery">
+          <el-option
+            v-for="item in dict.holiday_type"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+        <label class="el-form-item-label">申请结果</label>
+        <el-select v-model="query.status" clearable placeholder="请选择" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery">
+          <el-option
+            v-for="item in dict.holiday_status"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
         <rrOperation :crud="crud" />
       </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
@@ -51,7 +69,17 @@
           <!-- <el-form-item label="不可拆分" prop="split">
             <el-switch v-model="form.split" />
           </el-form-item> -->
-          <!-- <el-form-item label="假期状态">
+          <el-form-item label="请假类型" prop="type">
+            <el-select v-model="form.type" filterable placeholder="请选择">
+              <el-option
+                v-for="item in dict.holiday_type"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
+          <el-form-item v-show="status_show" label="申请结果" prop="status">
             <el-select v-model="form.status" filterable placeholder="请选择">
               <el-option
                 v-for="item in dict.holiday_status"
@@ -60,7 +88,7 @@
                 :value="item.value"
               />
             </el-select>
-          </el-form-item> -->
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -88,11 +116,17 @@
           <el-switch v-model="split" disabled />
         </el-table-column> -->
         <el-table-column prop="count" label="天数" />
-        <el-table-column prop="status" label="假期申请结果">
-          <!-- <template slot-scope="scope">
+        <el-table-column prop="type" label="请假类型">
+          <template slot-scope="scope">
+            {{ dict.label.holiday_type[scope.row.type] }}
+          </template>
+        </el-table-column>
+        <el-table-column prop="status" label="假期申请结果" />
+
+        <!-- <template slot-scope="scope">
             {{ dict.label.holiday_status[scope.row.status] }}
           </template> -->
-        </el-table-column>
+
         <!-- <el-table-column v-permission="['admin','holidayRecord:edit','holidayRecord:del']" label="操作" width="150px" align="center">
           <template slot-scope="scope">
             <udOperation
@@ -122,12 +156,13 @@ export default {
   name: 'HolidayRecord',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
-  dicts: ['holiday_status'],
+  dicts: ['holiday_type', 'holiday_status'],
   cruds() {
     return CRUD({ title: '请假记录', url: 'api/holidayRecord', sort: 'id,desc', crudMethod: { ...crudHolidayRecord }})
   },
   data() {
     return {
+      status_show: false,
       permission: {
         add: ['admin', 'holidayRecord:add'],
         edit: ['admin', 'holidayRecord:edit'],
@@ -146,6 +181,9 @@ export default {
         // endDate: [
         //   { required: true, message: '结束时间不能为空', trigger: 'blur' }
         // ],
+        type: [
+          { required: true, message: '请假类型不能为空', trigger: 'blur' }
+        ],
         phone: [
           { required: true, message: '手机号不能为空', trigger: 'blur' }
         ],
@@ -185,6 +223,7 @@ export default {
     // }
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
+      this.status_show = true
       var array = []
       array.push(this.parseTime(form.startDate, '{y}-{m}-{d}'))
       array.push(this.parseTime(form.endDate, '{y}-{m}-{d}'))
@@ -193,9 +232,6 @@ export default {
     // 新增前做的操作
     [CRUD.HOOK.beforeToAdd](crud, form) {
       this.$store.dispatch('GetInfo').then(res => {
-        console.log(res.user.username)
-        console.log(res.user.dept.name)
-        console.log(res.user.phone)
         this.form.userName = res.user.username
         this.form.deptName = res.user.dept.name
         this.form.phone = res.user.phone
@@ -233,13 +269,11 @@ export default {
           text += '<div style="background:#ffffff; color:#00ff00">' + priUser + '</div>'
           text += '<div style="background:#ffffff; color:#00ff00">' + priWeight + '</div>'
 
-          
-    
           this.$alert(text, '被抵消详情', {
             confirmButtonText: '确定',
             dangerouslyUseHTMLString: true
-          });
-        })  
+          })
+        })
       }
     }
   }

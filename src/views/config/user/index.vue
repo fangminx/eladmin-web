@@ -87,6 +87,7 @@ export default {
   },
   data() {
     return {
+      // isResouceShow: 1,
       permission: {
         add: ['admin', 'configUser:add'],
         edit: ['admin', 'configUser:edit'],
@@ -108,12 +109,9 @@ export default {
         // conditionItem: [
         //   { required: true, message: '条件项不能为空', trigger: 'blur' }
         // ],
-        condition_item: [{
-          required: false,
-          type: 'array',
-          message: '请选择一个条件',
-          trigger: 'blur'
-        }]
+        condition_item: [
+          { type: 'array', message: '请选择一个条件', trigger: 'change' }
+        ]
       },
       options: [
       ],
@@ -134,6 +132,7 @@ export default {
   },
   watch: {
     'selectOption': function(newVal, oldVal) {
+      // ++this.isResouceShow
       // 选中级联填充表单对应的2个字段
       var condi = this.$refs['ref_condion'].getCheckedNodes()[0].pathLabels
       var arr = condi.toString().split(',')
@@ -167,17 +166,18 @@ export default {
     },
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
-      this.selectOption = ','
+      console.log(form.conditionItem)
       getAllConditions().then(res => {
         this.options = res
       })
+      this.selectOption = form.conditionItem
     },
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.afterAddError](crud, form) {
       this.$notify.error({
-          title: '校验失败',
-          message: '请仔细检查用户名是否正确以及该用户的条件配置是否符合逻辑'
-        });
+        title: '校验失败',
+        message: '请仔细检查用户名是否正确以及该用户的条件配置是否符合逻辑'
+      })
     }
     //     conditionChange(item) {
     //       // 获取选中的级联结果

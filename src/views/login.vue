@@ -132,6 +132,10 @@ export default {
           }).catch(() => {
             this.loading = false
             this.getCode()
+            this.$notify.error({
+              title: '错误',
+              message: '登录失败！请核对登录信息后重新输入'
+            })
           })
         } else {
           console.log('error submit!!')
