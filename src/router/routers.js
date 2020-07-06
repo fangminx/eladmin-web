@@ -181,20 +181,20 @@ export const constantRouterMap = [
   //   ]
   // },
   
-  {
-    path: '/config/user',
-    component: Layout,
-    hidden: false,
-    redirect: 'noredirect',
-    children: [
-      {
-        path: 'center',
-        component: (resolve) => require(['@/views/config/user'], resolve),
-        name: '用户条件关系',
-        meta: { title: '用户条件关系', icon: 'edit' }
-      }
-    ]
-  },
+  // {
+  //   path: '/config/user',
+  //   component: Layout,
+  //   hidden: false,
+  //   redirect: 'noredirect',
+  //   children: [
+  //     {
+  //       path: 'center',
+  //       component: (resolve) => require(['@/views/config/user'], resolve),
+  //       name: '用户条件关系',
+  //       meta: { title: '用户条件关系', icon: 'edit' }
+  //     }
+  //   ]
+  // },
   // {
   //   path: '/config/param',
   //   component: Layout,
