@@ -28,6 +28,15 @@
             :value="item.value"
           />
         </el-select>
+        <label class="el-form-item-label">休假结果</label>
+        <el-select v-model="query.result" clearable placeholder="请选择" style="width: 185px;" class="filter-item" @keyup.enter.native="crud.toQuery">
+          <el-option
+            v-for="item in dict.holiday_result"
+            :key="item.id"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
         <rrOperation :crud="crud" />
       </div>
       <!--如果想在工具栏加入更多按钮，可以使用插槽方式， slot = 'left' or 'right'-->
@@ -89,6 +98,16 @@
               />
             </el-select>
           </el-form-item>
+          <el-form-item v-show="result_show" label="休假结果" prop="result">
+            <el-select v-model="form.result" clearable filterable placeholder="请选择">
+              <el-option
+                v-for="item in dict.holiday_result"
+                :key="item.id"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </el-form-item>
         </el-form>
         <div slot="footer" class="dialog-footer">
           <el-button type="text" @click="crud.cancelCU">取消</el-button>
@@ -121,8 +140,8 @@
             {{ dict.label.holiday_type[scope.row.type] }}
           </template>
         </el-table-column>
-        <el-table-column prop="status" label="假期申请结果" />
-
+        <el-table-column prop="status" label="申请结果" />
+        <el-table-column prop="result" label="休假结果" />
         <!-- <template slot-scope="scope">
             {{ dict.label.holiday_status[scope.row.status] }}
           </template> -->
@@ -156,13 +175,14 @@ export default {
   name: 'HolidayRecord',
   components: { pagination, crudOperation, rrOperation, udOperation },
   mixins: [presenter(), header(), form(defaultForm), crud()],
-  dicts: ['holiday_type', 'holiday_status'],
+  dicts: ['holiday_type', 'holiday_status','holiday_result'],
   cruds() {
     return CRUD({ title: '请假记录', url: 'api/holidayRecord', sort: 'id,desc', crudMethod: { ...crudHolidayRecord }})
   },
   data() {
     return {
       status_show: false,
+      result_show: false,
       permission: {
         add: ['admin', 'holidayRecord:add'],
         edit: ['admin', 'holidayRecord:edit'],
@@ -223,7 +243,8 @@ export default {
     // }
     // 打开编辑弹窗前做的操作
     [CRUD.HOOK.beforeToEdit](crud, form) {
-      this.status_show = true
+      // this.status_show = true
+      this.result_show = true
       var array = []
       array.push(this.parseTime(form.startDate, '{y}-{m}-{d}'))
       array.push(this.parseTime(form.endDate, '{y}-{m}-{d}'))
@@ -241,6 +262,7 @@ export default {
     [CRUD.HOOK.afterAddCancel](crud, form) {
       this.$store.dispatch('GetInfo').then(res => {
         this.form.rangeDate = ['', '']
+        this.form.type = ''
       })
     },
     // 获取两个时间之间的天数
