@@ -250,6 +250,7 @@ export default {
       array.push(this.parseTime(form.endDate, '{y}-{m}-{d}'))
       this.form.rangeDate = array
     },
+    
     // 新增前做的操作
     [CRUD.HOOK.beforeToAdd](crud, form) {
       this.$store.dispatch('GetInfo').then(res => {
@@ -257,11 +258,13 @@ export default {
         this.form.deptName = res.user.dept.name
         this.form.phone = res.user.phone
       })
+      this.result_show = false
+      this.form.result = ''
     },
     // 新增取消后
     [CRUD.HOOK.afterAddCancel](crud, form) {
       this.$store.dispatch('GetInfo').then(res => {
-        this.form.rangeDate = ['', '']
+        // this.form.rangeDate = ['', '']
         this.form.type = ''
       })
     },
