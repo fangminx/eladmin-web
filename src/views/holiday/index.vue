@@ -259,7 +259,7 @@ export default {
         this.form.phone = res.user.phone
       })
       this.result_show = false
-      this.form.result = ''
+      // this.form.result = ''
     },
     // 新增取消后
     [CRUD.HOOK.afterAddCancel](crud, form) {
@@ -284,10 +284,23 @@ export default {
       if (val && val.status == '被抵消') {
         getPassedRecord(val.id).then(res => {
           var text = ''
-          var passUser = '被抵消用户： ' + res.passedUser
-          var passWeight = '被抵消用户权重： ' + res.passedWeight
-          var priUser = '高优先级用户： ' + res.priorityUser
-          var priWeight = ' 高优先级用户权重： ' + res.priorityWeight
+          var passUser = '被抵消用户： '
+            var passWeight = '被抵消用户权重： '
+            var priUser = '高优先级用户： '
+            var priWeight = ' 高优先级用户权重： '
+            console.log('抵消。。。。' + res)
+          if (res != null && res != ''){
+            passUser += res.passedUser
+            passWeight += res.passedWeight
+            priUser += res.priorityUser
+            priWeight += res.priorityWeight
+          }else{
+            passUser += '系统未找到'
+            passWeight += '系统未找到'
+            priUser += '系统未找到'
+            priWeight += '系统未找到'
+          }
+          
 
           text += '<div style="background:#ffffff; color:#ff0000">' + passUser + '</div>'
           text += '<div style="background:#ffffff; color:#ff0000">' + passWeight + '</div>'
