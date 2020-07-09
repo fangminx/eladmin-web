@@ -25,7 +25,7 @@ export default {
   },
   data() {
     return {
-      title: '实时假期管理系统',
+      title: '消防队请假管理系统',
       logo: Logo
     }
   }

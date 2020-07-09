@@ -2,7 +2,7 @@ module.exports = {
   /**
    * @description 网站标题
    */
-  title: '实时假期管理',
+  title: '消防队请假管理',
   /**
    * @description 是否显示 tagsView
    */
