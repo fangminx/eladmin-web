@@ -75,7 +75,7 @@ export default {
     return {
       lineChartData: lineChartData.newVisitis,
       chartData: {
-          columns: ['用户名', '假期总数', '已用假期'],
+          columns: ['用户名', '假期总数', '已用假期','优先级'],
           rows: [
           ]
         }
