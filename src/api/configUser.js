@@ -35,4 +35,11 @@ export function getHoliday(userName) {
   })
 }
 
+export function getAllHoliday() {
+  return request({
+    url: 'api/configUser/day/all',
+    method: 'get'
+  })
+}
+
 export default { add, edit, del }

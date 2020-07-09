@@ -30,6 +30,9 @@ import './assets/icons' // icon
 import './router/index' // permission control
 import 'echarts-gl'
 
+import VCharts from 'v-charts'
+
+Vue.use(VCharts)
 Vue.use(VueHighlightJS)
 Vue.use(mavonEditor)
 Vue.use(permission)

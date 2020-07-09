@@ -8,6 +8,10 @@
       <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
         <line-chart :chart-data="lineChartData" />
       </el-row>
+
+      <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
+        <ve-histogram :data="chartData"></ve-histogram>
+      </el-row>
       <!-- <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="8">
           <div class="chart-wrapper">
@@ -36,6 +40,7 @@ import LineChart from './dashboard/LineChart'
 import RadarChart from '@/components/Echarts/RadarChart'
 import PieChart from '@/components/Echarts/PieChart'
 import BarChart from '@/components/Echarts/BarChart'
+import { getAllHoliday } from '@/api/configUser'
 
 const lineChartData = {
   newVisitis: {
@@ -68,13 +73,28 @@ export default {
   },
   data() {
     return {
-      lineChartData: lineChartData.newVisitis
+      lineChartData: lineChartData.newVisitis,
+      chartData: {
+          columns: ['用户名', '假期总数', '已用假期'],
+          rows: [
+          ]
+        }
     }
+  },
+  created() {
+    getAllHoliday().then(res => {
+        this.chartData.rows = res
+      })
   },
   methods: {
     handleSetLineChartData(type) {
       this.lineChartData = lineChartData[type]
-    }
+    },
+    // getAllHolidayForVChar() {
+    //   getAllHoliday().then(res => {
+    //     this.chartData.rows = res
+    //   })
+    // }
   }
 }
 </script>
