@@ -16,7 +16,8 @@ export default {
   watch: {},
   created() {
     // 连接webSocket，用于接收后台实时报警信息推送
-    this.webSocket()
+      this.webSocket()
+    
   },
   mounted() {},
   methods: {
@@ -33,7 +34,7 @@ export default {
       } else {
         console.log('进入else代码...')
         // 获取token保存到vuex中的用户信息，此处仅适用于本项目，注意删除或修改
-        store.dispatch('GetInfo').then(res => {
+        this.$store.dispatch('GetInfo').then(res => {
           console.log(res.user.phone)
           // 实例化socket，这里我把用户名传给了后台，使后台能判断要把消息发给哪个用户，其实也可以后台直接获取用户IP来判断并推送
           // const socketUrl = 'ws://127.0.0.1:8000/websocket/' + info.username;

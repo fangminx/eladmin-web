@@ -221,6 +221,8 @@ export default {
       ]
     }
   },
+   created() {
+  },
   watch: {
     'form.rangeDate': function(newVal, oldVal) {
       console.log(newVal)
@@ -259,6 +261,7 @@ export default {
         this.form.phone = res.user.phone
       })
       this.result_show = false
+      this.webSocket()
       // this.form.result = ''
     },
     // 新增取消后
@@ -283,34 +286,121 @@ export default {
     open(val) {
       if (val && val.status == '被抵消') {
         getPassedRecord(val.id).then(res => {
-          var text = ''
-          var passUser = '被抵消用户： '
-            var passWeight = '被抵消用户权重： '
-            var priUser = '高优先级用户： '
-            var priWeight = ' 高优先级用户权重： '
-            console.log('抵消。。。。' + res)
-          if (res != null && res != ''){
-            passUser += res.passedUser
-            passWeight += res.passedWeight
-            priUser += res.priorityUser
-            priWeight += res.priorityWeight
+          console.log('进入被抵消详情前端方法===========================')
+          if(res != null && res != ''){
+            var pass = res['pass']
+            var pre = res['pre'] 
+            console.log((res['pass'])[0][0]) //用户
+            console.log((res['pass'])[0][1]) //条件类
+            console.log((res['pass'])[0][2]) //条件项
+            console.log((res['pass'])[0][3]) //权重
+
+            var countpass = 0
+            var countpre = 0
+            var htmlstr = '<div>' + '低优先级用户： '+ pass[0][0] + '</div>'
+            htmlstr += "<table border='1' cellspacing='0' width='100%'>";
+            for(var i = 0; i < pass.length; i++) {
+              htmlstr += "<tr style='background:#ffffff; color:#ff0000'>";
+
+            var a = pass[i] + ''
+            var aa = a.split(',')[2]
+            var aaa = a.split(',')[3]
+
+              htmlstr += "<td >" +'条件： ' + aa + "</td>";
+              htmlstr += "<td >" +'权重： ' + aaa + "</td>";
+              countpass += parseFloat(aaa)
+              htmlstr += "</tr>";
+            }
+              htmlstr += "<tr style='background:#ffffff; color:#ff0000'><td colspan='2'>" +'总权重为： ' + countpass + "</td></td>";
+              htmlstr += "</table>";
+              htmlstr += '<div>' + '高优先级用户： '+ pre[0][0] + '</div>'
+              htmlstr += "<table border='1' cellspacing='0'  width='100%'>";
+
+            for(var ii = 0; ii < pre.length; ii++) {
+              htmlstr += "<tr style='background:#ffffff; color:#00ff00'>";
+            var b = pre[ii] + ''
+            var bb = b.split(',')[2]
+            var bbb = b.split(',')[3]
+
+              htmlstr += "<td >" +'条件： ' + bb + "</td>";
+              htmlstr += "<td >" +'权重： ' + bbb + "</td>";
+              countpre += parseFloat(bbb)
+              htmlstr += "</tr>";
+            }
+              htmlstr += "<tr style='background:#ffffff; color:#00ff00'><td colspan='2'>" +'总权重为： ' + countpre + "</td></tr>";
+              htmlstr += "</table>";
           }else{
-            passUser += '系统未找到'
-            passWeight += '系统未找到'
-            priUser += '系统未找到'
-            priWeight += '系统未找到'
+            htmlstr = '<div>' + '系统未找到相关信息' + '</div>'
           }
-          
 
-          text += '<div style="background:#ffffff; color:#ff0000">' + passUser + '</div>'
-          text += '<div style="background:#ffffff; color:#ff0000">' + passWeight + '</div>'
-          text += '<div style="background:#ffffff; color:#00ff00">' + priUser + '</div>'
-          text += '<div style="background:#ffffff; color:#00ff00">' + priWeight + '</div>'
 
-          this.$alert(text, '被抵消详情', {
+
+          this.$alert(htmlstr, '被抵消详情', {
             confirmButtonText: '确定',
             dangerouslyUseHTMLString: true
           })
+        })
+      }
+    },
+
+
+    webSocket() {
+      console.log('进入wedsocket前端方法')
+      const that = this
+      if (typeof (WebSocket) === 'undefined') {
+        this.$notify({
+          title: '提示',
+          message: '当前浏览器无法接收实时报警信息，请使用谷歌浏览器！',
+          type: 'warning',
+          duration: 0
+        })
+      } else {
+        console.log('进入else代码...')
+        // 获取token保存到vuex中的用户信息，此处仅适用于本项目，注意删除或修改
+        this.$store.dispatch('GetInfo').then(res => {
+          console.log(res.user.phone)
+          // 实例化socket，这里我把用户名传给了后台，使后台能判断要把消息发给哪个用户，其实也可以后台直接获取用户IP来判断并推送
+          // const socketUrl = 'ws://127.0.0.1:8000/websocket/' + info.username;
+          console.log('开始连接对应的ws地址...')
+          this.socket = new WebSocket('ws://36.35.109.71:8000/webSocket/' + res.user.phone)
+          // this.socket = new WebSocket('ws://localhost:8000/webSocket/' + res.user.phone)
+          // 监听socket打开
+          this.socket.onopen = function() {
+            console.log('浏览器WebSocket已打开')
+          }
+          // 监听socket消息接收
+          this.socket.onmessage = function(msg) {
+            console.log('开始接受socket消息，消息为' + msg.data)
+            console.log('开始接受socket消息，消息为' + JSON.parse(msg.data).msg)
+            // 转换为json对象
+            // const data = JSON.parse(msg.data)
+            that.$notify({
+              title: JSON.parse(msg.data).msg,
+              // 这里也可以把返回信息加入到message中显示
+              message: '实时提醒服务连接成功',
+              type: JSON.parse(msg.data).msgType,
+              duration: 0,
+              onClick: () => {
+                that.$router.push({
+                  // path: '/holiday/ref/index'
+                  path: '/holidayRecord/index'
+                })
+              }
+            })
+          }
+          // 监听socket错误
+          this.socket.onerror = function() {
+            that.$notify({
+              title: '错误',
+              message: '服务器错误，无法接收实时报警信息',
+              type: 'error',
+              duration: 0
+            })
+          }
+          // 监听socket关闭
+          this.socket.onclose = function() {
+            console.log('WebSocket已关闭')
+          }
         })
       }
     }
