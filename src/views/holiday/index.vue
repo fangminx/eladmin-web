@@ -290,14 +290,16 @@ export default {
           if(res != null && res != ''){
             var pass = res['pass']
             var pre = res['pre'] 
-            console.log((res['pass'])[0][0]) //用户
-            console.log((res['pass'])[0][1]) //条件类
-            console.log((res['pass'])[0][2]) //条件项
-            console.log((res['pass'])[0][3]) //权重
+          
+            // console.log((res['pass'])[0][0]) //用户
+            // console.log((res['pass'])[0][1]) //条件类
+            // console.log((res['pass'])[0][2]) //条件项
+            // console.log((res['pass'])[0][3]) //权重
 
             var countpass = 0
             var countpre = 0
-            var htmlstr = '<div>' + '低优先级用户： '+ pass[0][0] + '</div>'
+
+            var htmlstr = '<div>' + '低优先级用户： '+ val.userName + '</div>'
             htmlstr += "<table border='1' cellspacing='0' width='100%'>";
             for(var i = 0; i < pass.length; i++) {
               htmlstr += "<tr style='background:#ffffff; color:#ff0000'>";
