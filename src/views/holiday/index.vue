@@ -315,6 +315,7 @@ export default {
             }
               htmlstr += "<tr style='background:#ffffff; color:#ff0000'><td colspan='2'>" +'总权重为： ' + countpass + "</td></td>";
               htmlstr += "</table>";
+              htmlstr += '</br>'
               htmlstr += '<div>' + '高优先级用户： '+ pre[0][0] + '</div>'
               htmlstr += "<table border='1' cellspacing='0'  width='100%'>";
 
