@@ -24,4 +24,15 @@ export function edit(data) {
   })
 }
 
+export function getCanlendarInfo(userName) {
+  const params = {
+    userName
+  }
+  return request({
+    url: 'api/holidayRecord/canlendarInfo',
+    method: 'get',
+    params,
+  })
+}
+
 export default { add, edit, del }
