@@ -119,8 +119,12 @@ export default {
       let len = this.resDate.length
       let res = ""
       for(let i=0; i<len; i++){
-          if(this.resDate[i].date == v) {
-              res = '🍓' + this.resDate[i].content
+          if(this.resDate[i].date == v) { 
+              if(this.resDate[i].content == '申请成功' || this.resDate[i].content == '已休假'){
+                res = '🍓' + this.resDate[i].content
+              }else{
+                res = '🍆' + this.resDate[i].content
+              }
               break
          }
       }
