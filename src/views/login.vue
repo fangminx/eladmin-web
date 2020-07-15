@@ -55,7 +55,7 @@ export default {
       codeUrl: '',
       cookiePass: '',
       loginForm: {
-        username: '管理1',
+        username: '',
         password: '123456',
         rememberMe: false,
         code: '',
