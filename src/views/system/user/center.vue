@@ -23,7 +23,7 @@
               <li><svg-icon icon-class="user1" /> 用户昵称 <div class="user-right">{{ user.nickName }}</div></li>
               <li><svg-icon icon-class="dept" /> 所属部门 <div class="user-right"> {{ user.dept.name }}</div></li>
               <li><svg-icon icon-class="phone" /> 手机号码 <div class="user-right">{{ user.phone }}</div></li>
-              <li><svg-icon icon-class="email" /> 用户邮箱 <div class="user-right">{{ user.email }}</div></li>
+              <!-- <li><svg-icon icon-class="email" /> 用户邮箱 <div class="user-right">{{ user.email }}</div></li> -->
               <li><svg-icon icon-class="tab" /> 假期总数 <div class="user-right">{{ holiday[0] }}</div></li>
               <li><svg-icon icon-class="tab" /> 剩余假期 <div class="user-right">{{ holiday[0] - holiday[1] }}</div></li>
               <li>
