@@ -23,7 +23,7 @@
       </el-row>
 
       <el-row style="background:#fff;padding:16px 16px 0;margin-bottom:32px;">
-        <ve-histogram :data="chartData"></ve-histogram>
+        <ve-histogram width="100%" height="700px" :data="chartData" :data-zoom="dataZoom"></ve-histogram>
       </el-row>
       <!-- <el-row :gutter="32">
         <el-col :xs="24" :sm="24" :lg="8">
@@ -55,6 +55,7 @@ import PieChart from '@/components/Echarts/PieChart'
 import BarChart from '@/components/Echarts/BarChart'
 import { getAllHoliday } from '@/api/configUser'
 import { getCanlendarInfo } from '@/api/holidayRecord'
+import dataZoom from 'echarts/lib/component/dataZoom'
 
 
 // const lineChartData = {
@@ -87,6 +88,13 @@ export default {
     BarChart
   },
   data() {
+    this.dataZoom = [
+        {
+          type: 'slider',
+          start: 0,
+          end: 10
+        }
+      ]
     return {
       // lineChartData: lineChartData.newVisitis,
       chartData: {
